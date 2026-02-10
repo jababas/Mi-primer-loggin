@@ -5,6 +5,7 @@ from ui.professor_view import ProfessorView
 from ui.student_view import StudentView
 from services.auth_service import AuthService
 from presenters.login_presenter import LoginPresenter
+from ui.admin_view import AdminView
 
 class AppShell(QStackedWidget):
     
@@ -12,6 +13,7 @@ class AppShell(QStackedWidget):
     PAGE_LOGIN = 0
     PAGE_STUDENT = 1
     PAGE_PROFESSOR = 2
+    PAGE_ADMIN = 3
 
     def __init__(self):
         super().__init__()
@@ -20,6 +22,7 @@ class AppShell(QStackedWidget):
         self.login_view = LoginView()
         self.student_view = StudentView()
         self.professor_view = ProfessorView()
+        self.admin_view = AdminView()
 
 
         #Es el servicio que permite autenticar a los usuarioa
@@ -38,6 +41,7 @@ class AppShell(QStackedWidget):
         self.addWidget(self.login_view)         
         self.addWidget(self.student_view)#Estas dos lineas anteriores registran las dos ventanas
         self.addWidget(self.professor_view)
+        self.addWidget(self.admin_view)
         
         self.setCurrentIndex(self.PAGE_LOGIN)   #Pero se inicia siempre la pagina del login
         self.setWindowTitle("PyQt5 - MVP")      #Texto superior de la ventana
@@ -51,3 +55,6 @@ class AppShell(QStackedWidget):
         elif role == "professor":
             self.professor_view.set_user(username)
             self.setCurrentIndex(self.PAGE_PROFESSOR)
+        elif role == "administrator":
+            self.admin_view.set_user(username)
+            self.setCurrentIndex(self.PAGE_ADMIN)

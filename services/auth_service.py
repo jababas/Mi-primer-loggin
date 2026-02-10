@@ -15,7 +15,7 @@ class AuthService:
     def __init__(self):
         self._users = {
             
-            "admin":    {"password": "1234", "role": "admin"},
+            "admin":    {"password": "1234", "role": "administrator"},
             "alumno":   {"password": "1234", "role": "student"},
             "profesor": {"password": "1234", "role": "professor"},
         }
