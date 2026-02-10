@@ -1,7 +1,8 @@
 # core/app_shell.py
 from PyQt5.QtWidgets import QStackedWidget
 from ui.login_view import LoginView
-from ui.main_view import MainView
+from ui.professor_view import ProfessorView
+from ui.student_view import StudentView
 from services.auth_service import AuthService
 from presenters.login_presenter import LoginPresenter
 
@@ -9,14 +10,16 @@ class AppShell(QStackedWidget):
     
     #Define las paginas en las que se cambiara durante el proceso
     PAGE_LOGIN = 0
-    PAGE_MAIN = 1
+    PAGE_STUDENT = 1
+    PAGE_PROFESSOR = 2
 
     def __init__(self):
         super().__init__()
 
         #La clase no sabe de que manera sirven estas ventanas, solo las usa
         self.login_view = LoginView()
-        self.main_view = MainView()
+        self.student_view = StudentView()
+        self.professor_view = ProfessorView()
 
 
         #Es el servicio que permite autenticar a los usuarioa
@@ -30,12 +33,21 @@ class AppShell(QStackedWidget):
             on_success=self._go_main    #Si la autenticacion es valida llama a esa funcionn
         )
         
-        self.addWidget(self.login_view)
-        self.addWidget(self.main_view)
-        self.setCurrentIndex(self.PAGE_LOGIN)
-        self.setWindowTitle("PyQt5 - MVP")
-        self.resize(700, 700)
         
-    def _go_main(self, username: str):
-        self.main_view.set_welcome(username)
-        self.setCurrentIndex(self.PAGE_MAIN)
+    #Aqui se indican las vistas
+        self.addWidget(self.login_view)         
+        self.addWidget(self.student_view)#Estas dos lineas anteriores registran las dos ventanas
+        self.addWidget(self.professor_view)
+        
+        self.setCurrentIndex(self.PAGE_LOGIN)   #Pero se inicia siempre la pagina del login
+        self.setWindowTitle("PyQt5 - MVP")      #Texto superior de la ventana
+        self.resize(700, 700)                   #Dimensiones de la pantalla
+        
+    #La funcion que se invoca cuando el registro es correcto       
+    def _go_main(self, username: str, role: str):
+        if role == "student":
+            self.student_view.set_user(username)
+            self.setCurrentIndex(self.PAGE_STUDENT)
+        elif role == "professor":
+            self.professor_view.set_user(username)
+            self.setCurrentIndex(self.PAGE_PROFESSOR)
